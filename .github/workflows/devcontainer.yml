@@ -1,0 +1,49 @@
+name: Build and publish Docker images for devcontainer
+
+on: 
+  push:
+    paths: 
+      - '.devcontainer/Dockerfile'
+      - '.github/workflows/devcontainer.yml'
+
+jobs:
+  build-and-publish:
+    strategy:
+      matrix:
+        include:
+          - debian: buster
+            python: 3
+          - debian: bullseye
+            python: 3
+          - debian: bookworm
+            python: 3
+          - debian: bookworm
+            python: 3.12
+
+    runs-on: ubuntu-latest
+        
+    steps:
+    - name: checkout
+      uses: actions/checkout@v4
+    
+    - name: Set up Docker Buildx
+      uses: docker/setup-buildx-action@v3
+
+    - name: Login to ghcr.io
+      uses: docker/login-action@v3
+      with:
+        registry: ghcr.io
+        username: ${{ github.actor }}
+        password: ${{ secrets.GITHUB_TOKEN }}
+
+    - name: Build and push
+      uses: docker/build-push-action@v5
+      with:
+        context: .devcontainer
+        push: true
+        cache-from: type=gha
+        cache-to: type=gha,mode=max
+        build-args: |
+          DEBIAN=${{ matrix.debian }}
+          PYTHON=${{ matrix.python }}
+        tags: ghcr.io/musicalninjarandint/gpiozero-devcontainer:${{ matrix.debian }}-${{ matrix.python }}

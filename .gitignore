@@ -1,0 +1,6 @@
+# Dedicated venv
+.venv
+
+# Background docs preview output
+preview.out
+preview.err

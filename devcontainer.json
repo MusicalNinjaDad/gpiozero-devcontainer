@@ -1,0 +1,31 @@
+{
+    "image": "ghcr.io/musicalninjarandint/gpiozero-devcontainer:bookworm-3",
+    // "image": "ghcr.io/musicalninjarandint/gpiozero-devcontainer:bullseye-3",
+    // "image": "ghcr.io/musicalninjarandint/gpiozero-devcontainer:buster-3",
+    // "image": "ghcr.io/musicalninjarandint/gpiozero-devcontainer:bookworm-3.12",
+
+    "forwardPorts": [8000],
+
+    "customizations": {
+        "vscode": {
+            "extensions": [
+                "ms-python.python",
+                "ms-python.vscode-pylance"
+            ],
+            "settings": {
+                "python.defaultInterpreterPath": ".devcontainer/.venv/bin/python3",
+                "python.testing.pytestEnabled": true,
+                "terminal.integrated.defaultProfile.linux": "bash", 
+                "terminal.integrated.profiles.linux": {
+                    "bash": {
+                        "path": "/usr/bin/bash"
+                    }
+                }
+            }
+        }
+    },
+
+    "postCreateCommand": ".devcontainer/postcreate.sh",
+    "postStartCommand": "nohup bash -c '. .devcontainer/.venv/bin/activate && make preview &' >> .devcontainer/preview.out 2>> .devcontainer/preview.err",
+    "postAttachCommand": ". .devcontainer/.venv/bin/activate"
+}
