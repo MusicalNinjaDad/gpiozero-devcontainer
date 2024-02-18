@@ -11,8 +11,6 @@ jobs:
     strategy:
       matrix:
         include:
-          - debian: buster
-            python: 3
           - debian: bullseye
             python: 3
           - debian: bookworm
